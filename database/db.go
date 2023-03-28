@@ -19,8 +19,10 @@ func InitDB() {
 	}
 
 	// Database Auto Migrate.
-	Db.AutoMigrate(&models.User{})
-	Db.AutoMigrate(&models.Tools{})
-	Db.AutoMigrate(&models.Tools_Category{})
+	Db.AutoMigrate(
+		&models.User{},
+		&models.Tools{},
+		&models.Tools_Category{},
+	)
 
 }
