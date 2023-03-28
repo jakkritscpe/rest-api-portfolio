@@ -1,21 +1,18 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	AuthController "github.com/jakkritscpe/rest-api-portfolio/controller/auth"
 	UserController "github.com/jakkritscpe/rest-api-portfolio/controller/user"
 	DatabaseCon "github.com/jakkritscpe/rest-api-portfolio/database"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	DatabaseCon.InitDB()
 
