@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: rest-api-portfolio
-    buildCommand: go build -o main
-    startCommand: ./main
-    healthCheckPath: /
-    initialDelaySeconds: 3
-    periodSeconds: 10
-
