@@ -4,10 +4,6 @@ services:
     buildCommand: go build -o main
     startCommand: ./main
     healthCheckPath: /
-      httpGet:
-        path: /health
-        port: 8080
-        scheme: http
-      initialDelaySeconds: 3
-      periodSeconds: 10
+    initialDelaySeconds: 3
+    periodSeconds: 10
 
