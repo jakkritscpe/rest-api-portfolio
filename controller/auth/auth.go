@@ -16,6 +16,12 @@ import (
 
 var hmacSampleSecret []byte
 
+// Service help check
+func Root(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"massge": "Hi this is API portfolio."})
+}
+
+
 // Service Register
 type RegisterBody struct {
 	Username string `json:"username" binding:"required"`

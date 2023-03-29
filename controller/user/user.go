@@ -8,7 +8,7 @@ import (
 	"github.com/jakkritscpe/rest-api-portfolio/models"
 )
 
-func ReadAllUsers(c *gin.Context) {
+func ReadAll(c *gin.Context) {
 	var users []models.User
 	db_con.Db.Find(&users)
 	c.JSON(http.StatusOK, gin.H{
