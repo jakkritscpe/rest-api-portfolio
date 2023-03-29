@@ -1,9 +1,9 @@
 services:
-  - type: service
+  - type: web
     name: rest-api-portfolio
     buildCommand: go build -o main
     startCommand: ./main
-    healthCheck:
+    healthCheckPath: /
       httpGet:
         path: /health
         port: 8080
