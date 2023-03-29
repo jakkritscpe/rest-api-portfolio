@@ -1,13 +1,7 @@
 services:
-  - name: my-api
-    env:
-      - key: ENV
-        value: production
+  - name: rest-api-portfolio
     buildCommand: go build -o main
     startCommand: ./main
-    scaling:
-      mode: manual
-      count: 2
     healthCheck:
       httpGet:
         path: /health
@@ -15,10 +9,4 @@ services:
         scheme: http
       initialDelaySeconds: 3
       periodSeconds: 10
-    routes:
-      - path: /*
-        targetService: my-api
-        type: http
-    envVars:
-      - name: JWT_SECRET
-        value: "{{ env.JWT_SECRET }}"
+
