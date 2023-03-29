@@ -1,5 +1,5 @@
 services:
-  - type: web
+  - type: service
     name: rest-api-portfolio
     buildCommand: go build -o main
     startCommand: ./main
