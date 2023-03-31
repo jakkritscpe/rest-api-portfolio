@@ -22,7 +22,9 @@ func InitDB() {
 	Db.AutoMigrate(
 		&models.User{},
 		&models.Tools{},
-		&models.Tools_Category{},
+		&models.CategoryTools{},
+		&models.Skills{},
+		&models.Projects{},
 	)
 
 }

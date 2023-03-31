@@ -14,11 +14,13 @@ func JWTAuthen() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		hmacSampleSecret := []byte(os.Getenv("JWT_SECRET_KEY"))
 		header := c.Request.Header.Get("Authorization")
+
 		if header == "" {
 			c.String(http.StatusForbidden, "No Authorization header provided")
 			c.Abort()
 			return
 		}
+
 		tokenString := strings.Replace(header, "Bearer ", "", 1)
 
 		token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
@@ -34,8 +36,8 @@ func JWTAuthen() gin.HandlerFunc {
 			c.Set("userId", claims["userId"])
 
 		} else {
-			c.AbortWithStatusJSON(http.StatusOK, gin.H{
-				"status": "forbidden", "massage": err.Error(),
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"massage": err.Error(),
 			})
 		}
 

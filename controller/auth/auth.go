@@ -21,7 +21,6 @@ func Root(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"massge": "Hi this is API portfolio."})
 }
 
-
 // Service Register
 type RegisterBody struct {
 	Username string `json:"username" binding:"required"`
@@ -42,8 +41,8 @@ func Register(c *gin.Context) {
 	var userExist models.User
 	db_con.Db.Where("username = ?", json.Username).First(&userExist)
 	if userExist.ID > 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "error", "massage": "User Exists.",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "User Exists.",
 		})
 		return
 	}
@@ -54,11 +53,11 @@ func Register(c *gin.Context) {
 	db_con.Db.Create(&user)
 	if user.ID > 0 {
 		c.JSON(http.StatusCreated, gin.H{
-			"status": "ok", "massage": "User Created Success.", "userID": user.ID,
+			"massage": "User Created Success.", "userID": user.ID,
 		})
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "error", "massage": "User Created Failed.",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "User Created Failed.",
 		})
 	}
 }
@@ -80,8 +79,8 @@ func Login(c *gin.Context) {
 	var userExist models.User
 	db_con.Db.Where("username = ?", json.Username).First(&userExist)
 	if userExist.ID == 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "error", "massage": "User Dose Not Exists.",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "User Dose Not Exists.",
 		})
 		return
 	}
@@ -99,11 +98,11 @@ func Login(c *gin.Context) {
 		log.Println(tokenString, err)
 
 		c.JSON(http.StatusOK, gin.H{
-			"status": "ok", "massage": "Login Success.", "token": tokenString,
+			"massage": "Login Success.", "token": tokenString,
 		})
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "error", "massage": "Login Failed.",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "Login Failed.",
 		})
 	}
 

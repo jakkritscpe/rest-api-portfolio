@@ -1,12 +1,13 @@
 package models
 
-import "gorm.io/gorm"
-
 type User struct {
-	Username string
-	Password string
-	Fullname string
-	Nickname string
-	Avatar   string
-	gorm.Model
+	CommonFields
+	Username  string `json:"username,omitempty"`
+	Password  string `json:"password,omitempty"`
+	Fullname  string `json:"fullname,omitempty"`
+	Nickname  string `json:"nickname,omitempty"`
+	Avatar    string `json:"avatar,omitempty"`
+	Email     string `json:"email,omitempty"`
+	Education string `json:"education,omitempty"`
+	Github    string `json:"github,omitempty"`
 }
