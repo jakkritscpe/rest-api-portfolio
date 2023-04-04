@@ -2,6 +2,7 @@ package tools
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	db_con "github.com/jakkritscpe/rest-api-portfolio/database"
@@ -11,6 +12,16 @@ import (
 type CategoryToolsBody struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+}
+
+// ReadCategoryTools() is a function that reads all the data in the CategoryTools table and returns it
+// in JSON format
+func ReadCategoryTools(c *gin.Context) {
+	var categoryTools []models.CategoryTools
+	db_con.Db.Find(&categoryTools)
+	c.JSON(http.StatusOK, gin.H{
+		"massage": "CategoryTools Read Success.", "data": categoryTools,
+	})
 }
 
 // If the user exists, return an error. If the user doesn't exist, create the user
@@ -54,12 +65,23 @@ func UpdateCategoryTools(c *gin.Context) {
 		return
 	}
 
-	//Check exists
+	//Check id exists
 	var categoryToolsExist models.CategoryTools
 	db_con.Db.Where("id = ?", json.ID).First(&categoryToolsExist)
 	if categoryToolsExist.ID < 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"massage": "ID Not found",
+			"massage": "ID Not found.",
+		})
+		return
+	}
+	//Check name exists
+	var categoryToolsNameExist models.CategoryTools
+	db_con.Db.Where("name = ?", json.Name).First(&categoryToolsNameExist)
+	input_json := strings.ToUpper(categoryToolsNameExist.Name)
+	output_json := strings.ToUpper(json.Name)
+	if input_json == output_json {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "Name exists.",
 		})
 		return
 	}

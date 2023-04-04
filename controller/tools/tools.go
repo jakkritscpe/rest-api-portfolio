@@ -2,6 +2,7 @@ package tools
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	db_con "github.com/jakkritscpe/rest-api-portfolio/database"
@@ -13,6 +14,23 @@ type ToolsBody struct {
 	Name       string `json:"name"`
 	Urlimg     string `json:"url_img"`
 	CategoryID int    `json:"category_id"`
+}
+
+func ReadTools(c *gin.Context) {
+
+	type result struct {
+		ID           uint   `json:"id"`
+		Name         string `json:"name"`
+		Urlimg       string `json:"url_img"`
+		CategoryID   int    `json:"category_id"`
+		CategoryName string `json:"category_name"`
+	}
+
+	var rs []result
+	db_con.Db.Table("tools").Select("tools.id, tools.name, tools.urlimg, tools.category_id, category_tools.name as category_name ").Joins("left join category_tools on category_tools.id = tools.category_id").Scan(&rs)
+	c.JSON(http.StatusOK, gin.H{
+		"massage": "Tools Read Success.", "data": rs,
+	})
 }
 
 // If the request body is valid JSON, then check if the tool exists, if it doesn't then create it
@@ -63,6 +81,18 @@ func UpdateTools(c *gin.Context) {
 	if ToolsExist.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"massage": "ID Not found",
+		})
+		return
+	}
+
+	//Check name exists
+	var toolsNameExist models.Tools
+	db_con.Db.Where("name = ?", json.Name).First(&toolsNameExist)
+	input_json := strings.ToUpper(toolsNameExist.Name)
+	output_json := strings.ToUpper(json.Name)
+	if input_json == output_json {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "Name exists.",
 		})
 		return
 	}

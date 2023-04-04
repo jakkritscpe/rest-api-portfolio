@@ -1,6 +1,7 @@
 package database
 
 import (
+	"log"
 	"os"
 
 	"github.com/jakkritscpe/rest-api-portfolio/models"
@@ -16,6 +17,8 @@ func InitDB() {
 	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database.")
+	} else {
+		log.Println("Connect database Success.")
 	}
 
 	// Database Auto Migrate.

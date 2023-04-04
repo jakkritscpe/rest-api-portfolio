@@ -2,6 +2,7 @@ package skills
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	db_con "github.com/jakkritscpe/rest-api-portfolio/database"
@@ -11,6 +12,14 @@ import (
 type SkillBody struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+}
+
+func ReadSkills(c *gin.Context) {
+	var skills []models.Skills
+	db_con.Db.Find(&skills)
+	c.JSON(http.StatusOK, gin.H{
+		"massage": "Skills Read Success.", "data": skills,
+	})
 }
 
 // If the request body is valid JSON, check if the skill already exists, if it doesn't, create it
@@ -61,6 +70,18 @@ func UpdateSkill(c *gin.Context) {
 	if skillExist.ID < 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"massage": "ID Not found",
+		})
+		return
+	}
+
+	//Check name exists
+	var skillNameExist models.Skills
+	db_con.Db.Where("name = ?", json.Name).First(&skillNameExist)
+	input_json := strings.ToUpper(skillNameExist.Name)
+	output_json := strings.ToUpper(json.Name)
+	if input_json == output_json {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"massage": "Name exists.",
 		})
 		return
 	}

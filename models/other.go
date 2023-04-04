@@ -18,6 +18,7 @@ type Projects struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Urlimg      string `json:"urlimg,omitempty"`
+	Urlvideo    string `json:"urlvideo,omitempty"`
 	SkillID     int    `json:"category_id,omitempty"`
 	Skills      Skills `gorm:"foreignKey:SkillID;references:ID"`
 }

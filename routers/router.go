@@ -6,6 +6,7 @@ import (
 	"github.com/jakkritscpe/rest-api-portfolio/middleware"
 
 	AuthController "github.com/jakkritscpe/rest-api-portfolio/controller/auth"
+	SkillsController "github.com/jakkritscpe/rest-api-portfolio/controller/skills"
 	ToolsController "github.com/jakkritscpe/rest-api-portfolio/controller/tools"
 	UserController "github.com/jakkritscpe/rest-api-portfolio/controller/user"
 )
@@ -18,23 +19,36 @@ func SetupRouter() *gin.Engine {
 	r.GET("/", AuthController.Root)
 	r.POST("/login", AuthController.Login)
 
-	authorized := r.Group("/user", middleware.JWTAuthen())
+	r.GET("/categorytools", ToolsController.ReadCategoryTools)
+	r.GET("/tools", ToolsController.ReadTools)
 
+	r.GET("/skills", SkillsController.ReadSkills)
+	r.GET("/projects", SkillsController.ReadProjects)
+
+	authorized := r.Group("/user", middleware.JWTAuthen())
 	// user
 	authorized.POST("/register", AuthController.Register)
 	authorized.GET("/readall", UserController.ReadAll)
 
 	// tools create
-	authorized.POST("/categorytools", ToolsController.AddCategoryTools)
-	authorized.POST("/tools", ToolsController.AddTools)
+	authorized.POST("/categorytool", ToolsController.AddCategoryTools)
+	authorized.POST("/tool", ToolsController.AddTools)
 	// - update
-	authorized.PATCH("/categorytools", ToolsController.UpdateCategoryTools)
-	authorized.PATCH("/tools", ToolsController.UpdateTools)
+	authorized.PATCH("/categorytool", ToolsController.UpdateCategoryTools)
+	authorized.PATCH("/tool", ToolsController.UpdateTools)
 	// - delete
-	authorized.DELETE("/categorytools", ToolsController.DeleteCategoryTools)
-	authorized.DELETE("/tools", ToolsController.DeleteTools)
+	authorized.DELETE("/categorytool", ToolsController.DeleteCategoryTools)
+	authorized.DELETE("/tool", ToolsController.DeleteTools)
 
 	//skills
+	authorized.POST("/skill", SkillsController.AddSkill)
+	authorized.POST("/project", SkillsController.AddProject)
+	// - update
+	authorized.PATCH("/skill", SkillsController.UpdateSkill)
+	authorized.PATCH("/project", SkillsController.UpdateProject)
+	// - delete
+	authorized.DELETE("/skill", SkillsController.DeleteSkill)
+	authorized.DELETE("/project", SkillsController.DeleteProject)
 
 	return r
 }
